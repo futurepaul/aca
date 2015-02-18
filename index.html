@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="style.css" rel="stylesheet">
+        <link href="node_modules/codemirror/lib/codemirror.css" rel="stylesheet">
+
+        <script src="/webpack-dev-server.js" type="text/javascript" charset="utf-8"></script>
+    </head>
+    <body>
+    <div id="control">hey!
+	    <input id="start" type="button" value="start" />
+	    <input id="stop" type="button" value="stop" />
+	    <input id="replay" type="button" value="replay" />
+    	<span id="time">0</div>
+    </div>
+    <div id="editor-container">
+	    <textarea id="editor">function foo(items) {
+	    var i;
+	    for (i = 0; i &lt; items.length; i++) {
+	        alert("Ace Rocks " + items[i]);
+	    }
+	}
+		</textarea>
+	</div>
+        <script type="text/javascript" src="bundle.js" charset="utf-8"></script>
+    </body>
+</html>

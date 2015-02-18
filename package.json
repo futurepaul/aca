@@ -1,0 +1,14 @@
+{
+  "name": "acacm",
+  "version": "1.0.0",
+  "description": "audio code annotation",
+  "main": "bundle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paul",
+  "license": "ISC",
+  "devDependencies": {
+    "webpack": "^1.5.3"
+  }
+}
