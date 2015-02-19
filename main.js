@@ -46,7 +46,7 @@ var timeCop = function (array, time) {
   	while (array.indexOf(bestguess) == -1 && bestguess !== 0) {
     	bestguess--;
 	}
-  	return bestguess;
+  	return array.indexOf(bestguess);
 };
 
 function renderLoop() {
@@ -76,8 +76,8 @@ function stopLoop() {
     }
 }
 
-var replay = function() {
-  step = 0;
+var replay = function(step) {
+  step = step;
   starttime = Date.now();
   if (localStorage.length === 0) {
   	startLoop();
@@ -168,6 +168,10 @@ widget.bind(SC.Widget.Events.READY, function() {
 var logtimes = function (scposition) {
 	console.log("my time: " + timesofar + " sctime: " + scposition);
 	console.log(timeCop(eventTimes, scposition));
+};
+
+var gettime = function (scposition) {
+	timeCop(eventTimes, scposition);
 };
 
 
