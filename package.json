@@ -8,8 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
-  "type": "git",
-  "url": "git://github.com/futurepaul/aca.git"
+    "type": "git",
+    "url": "git://github.com/futurepaul/aca.git"
   },
   "author": "Paul",
   "license": "ISC",
@@ -17,6 +17,8 @@
     "webpack": "^1.5.3"
   },
   "dependencies": {
-    "codemirror": "^4.12.0"
+    "codemirror": "^4.12.0",
+    "css-loader": "^0.9.1",
+    "style-loader": "^0.8.3"
   }
 }
