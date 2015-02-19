@@ -1,5 +1,7 @@
-
 var CodeMirror = require("codemirror/lib/codemirror");
+
+require("codemirror/lib/codemirror.css");
+require("./style.css");
 
 require("codemirror/mode/javascript/javascript");
 require("codemirror/addon/search/match-highlighter");
@@ -15,6 +17,7 @@ var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
     styleActiveLine: true,
     styleSelectedText: true
 });
+
 
 var starttime;
 var timesofar;
@@ -33,12 +36,6 @@ var stop = function() {
 
 var step = 0;
 
-var replay = function() {
-	step = 0;
-	starttime = Date.now();
-	window.requestAnimationFrame(renderStep);
-};
-
 function renderStep(reqID) {
 	if (step < eventLog.length) {
 		timesofar = Date.now() - starttime;
@@ -53,6 +50,11 @@ function renderStep(reqID) {
 	}
 }
 
+var replay = function() {
+  step = 0;
+  starttime = Date.now();
+  window.requestAnimationFrame(renderStep);
+};
 
 var displayTimer = function(time) {
 	document.getElementById("time").textContent=time;
@@ -98,4 +100,3 @@ var replayRender = function(events, step) {
 	 	return eventTime;
 	}
 };
-
