@@ -65,11 +65,15 @@ body {
     right: 0;
 }
 
+.CodeMirror {
+    height: auto;
+}
+
 .cm-matchhighlight {
     background: pink;
 }
 
 .CodeMirror-matchingbracket {
     color: black;
-    border: 1px solid pink;
+    border-bottom: 1px solid pink;
 }
