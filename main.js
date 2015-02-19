@@ -65,6 +65,7 @@ document.getElementById("stop").onclick = stop;
 document.getElementById("replay").onclick = replay;
 
 var eventLog = [];
+var eventTimes = [];
 
 var posFromEvent = function(event) {
 	var anchor = event[0].anchor;
@@ -78,8 +79,10 @@ var posFromEvent = function(event) {
 editor.doc.on("cursorActivity", function() {
 	if (recording) {
 		eventLog.push(posFromEvent(editor.doc.listSelections()));
+		eventTimes.push(timesofar);
 		displayTimer(timesofar);
 		console.log(eventLog);
+		console.log(eventTimes);
 	}
 });
 
