@@ -43,10 +43,14 @@ var stop = function() {
 
 var timeCop = function (array, time) {
 	var bestguess = Math.ceil(time);
-  	while (array.indexOf(bestguess) == -1 && bestguess !== 0) {
-    	bestguess--;
+	if (array.indexOf(bestguess) == -1) {
+		return 0;
+	} else {
+		while (bestguess > 0) {
+			bestguess--;
+		}
+		return bestguess;
 	}
-  	return array.indexOf(bestguess);
 };
 
 function renderLoop() {
@@ -155,7 +159,7 @@ widget = SC.Widget(widgetIframe);
 
 widget.bind(SC.Widget.Events.READY, function() {
 	widget.bind(SC.Widget.Events.PLAY, function() {
-    	replay();
+		replay();
     	widget.getPosition(logtimes);
     });
     widget.bind(SC.Widget.Events.PAUSE, function() {
