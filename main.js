@@ -42,7 +42,7 @@ var stop = function() {
 
 
 var timeCop = function (array, time) {
-	var bestguess = time;
+	var bestguess = Math.ceil(time);
   	while (array.indexOf(bestguess) == -1) {
     	bestguess--;
 	}
@@ -167,6 +167,7 @@ widget.bind(SC.Widget.Events.READY, function() {
 
 var logtimes = function (scposition) {
 	console.log("my time: " + timesofar + " sctime: " + scposition);
+	//timeCop(eventTimes, scposition);
 };
 
 
