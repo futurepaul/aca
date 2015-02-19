@@ -53,7 +53,24 @@ function renderStep(reqID) {
 var replay = function() {
   step = 0;
   starttime = Date.now();
-  window.requestAnimationFrame(renderStep);
+  if (localStorage.length === 0) {
+  	window.requestAnimationFrame(renderStep);
+  } else {
+  	eventLog = JSON.parse(localStorage.getItem('events'));
+  	eventTimes = JSON.parse(localStorage.getItem('times'));
+  	window.requestAnimationFrame(renderStep);
+  }
+};
+
+var clear = function() {
+	if (window.confirm("Are you sure you want to clear events in localstorage?")) {
+		localStorage.clear();
+	}
+};
+
+var store = function() {
+	localStorage.setItem('events', JSON.stringify(eventLog));
+	localStorage.setItem('times', JSON.stringify(eventTimes));
 };
 
 var displayTimer = function(time) {
@@ -63,6 +80,8 @@ var displayTimer = function(time) {
 document.getElementById("start").onclick = start;
 document.getElementById("stop").onclick = stop;
 document.getElementById("replay").onclick = replay;
+document.getElementById("store").onclick = store;
+document.getElementById("clear").onclick = clear;
 
 var eventLog = [];
 var eventTimes = [];
