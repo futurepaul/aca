@@ -132,3 +132,15 @@ var replayRender = function(events, step) {
 	 	return eventTime;
 	}
 };
+
+
+//soundcloud
+
+
+SC.initialize({
+  client_id: '236697f8b4f2a7269e15ec730362fead'
+});
+
+var track_url = 'http://soundcloud.com/forss/flickermood';
+SC.oEmbed(track_url, { auto_play: false, maxheight: 81 }, document.getElementById("footer"));
+
