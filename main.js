@@ -80,14 +80,16 @@ function stopLoop() {
     }
 }
 
+var populate = function() {
+	eventLog = JSON.parse(localStorage.getItem('events'));
+  	eventTimes = JSON.parse(localStorage.getItem('times'));
+};
+
 var replay = function() {
   starttime = Date.now();
   if (localStorage.length === 0) {
   	startLoop();
   } else {
-  	eventLog = JSON.parse(localStorage.getItem('events'));
-  	eventTimes = JSON.parse(localStorage.getItem('times'));
-  	console.log(timeCop(eventTimes, 4000));
   	startLoop();
   }
 };
@@ -109,6 +111,7 @@ var displayTimer = function(time) {
 
 document.getElementById("start").onclick = start;
 document.getElementById("stop").onclick = stop;
+document.getElementById("populate").onclick = populate;
 document.getElementById("replay").onclick = replay;
 document.getElementById("store").onclick = store;
 document.getElementById("clear").onclick = clear;
