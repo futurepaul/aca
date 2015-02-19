@@ -24,6 +24,11 @@ var timesofar;
 var recording;
 var delay;
 
+var step = 0;
+
+var eventLog = [];
+var eventTimes = [];
+
 var start = function() {
 	starttime = Date.now();
 	recording = true;
@@ -34,7 +39,14 @@ var stop = function() {
 	recording = false;
 };
 
-var step = 0;
+
+var timeCop = function (array, time) {
+	var bestguess = time;
+  	while (array.indexOf(bestguess) == -1) {
+    	bestguess--;
+	}
+  	return bestguess;
+};
 
 function renderStep(reqID) {
 	if (step < eventLog.length) {
@@ -58,6 +70,7 @@ var replay = function() {
   } else {
   	eventLog = JSON.parse(localStorage.getItem('events'));
   	eventTimes = JSON.parse(localStorage.getItem('times'));
+  	console.log(timeCop(eventTimes, 4000));
   	window.requestAnimationFrame(renderStep);
   }
 };
@@ -82,9 +95,6 @@ document.getElementById("stop").onclick = stop;
 document.getElementById("replay").onclick = replay;
 document.getElementById("store").onclick = store;
 document.getElementById("clear").onclick = clear;
-
-var eventLog = [];
-var eventTimes = [];
 
 var posFromEvent = function(event) {
 	var anchor = event[0].anchor;
