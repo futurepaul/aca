@@ -23,6 +23,7 @@ var starttime;
 var timesofar;
 var recording;
 var delay;
+var requestId;
 
 var step = 0;
 
@@ -48,30 +49,43 @@ var timeCop = function (array, time) {
   	return bestguess;
 };
 
-function renderStep(reqID) {
+function renderLoop() {
 	if (step < eventLog.length) {
 		timesofar = Date.now() - starttime;
 		if (timesofar > replayRender(eventLog, step)) {
 			step++;
 		}
 		displayTimer(timesofar);
-		window.requestAnimationFrame(renderStep);
+		requestId = window.requestAnimationFrame(renderLoop);
 	} else {
-		window.cancelAnimationFrame(renderStep);
+		stopLoop();
 		console.log("That's it!");
 	}
+}
+
+function startLoop() {
+	if (!requestId) {
+       renderLoop();
+    }
+}
+
+function stopLoop() {
+	if (requestId) {
+       window.cancelAnimationFrame(requestId);
+       requestId = undefined;
+    }
 }
 
 var replay = function() {
   step = 0;
   starttime = Date.now();
   if (localStorage.length === 0) {
-  	window.requestAnimationFrame(renderStep);
+  	startLoop();
   } else {
   	eventLog = JSON.parse(localStorage.getItem('events'));
   	eventTimes = JSON.parse(localStorage.getItem('times'));
   	console.log(timeCop(eventTimes, 4000));
-  	window.requestAnimationFrame(renderStep);
+  	startLoop();
   }
 };
 
@@ -141,10 +155,14 @@ var widgetIframe = document.getElementById('sc-widget'),
 widget = SC.Widget(widgetIframe);
 
 widget.bind(SC.Widget.Events.READY, function() {
-      widget.bind(SC.Widget.Events.PLAY, function() {
-      	replay();
-      	widget.getPosition(logtimes);
-      });
+	widget.bind(SC.Widget.Events.PLAY, function() {
+    	replay();
+    	widget.getPosition(logtimes);
+    });
+    widget.bind(SC.Widget.Events.PAUSE, function() {
+    	stopLoop();
+    	widget.getPosition(logtimes);
+    });
 });
 
 var logtimes = function (scposition) {
