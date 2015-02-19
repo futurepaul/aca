@@ -76,8 +76,7 @@ function stopLoop() {
     }
 }
 
-var replay = function(step) {
-  step = step;
+var replay = function() {
   starttime = Date.now();
   if (localStorage.length === 0) {
   	startLoop();
