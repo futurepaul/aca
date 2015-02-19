@@ -43,13 +43,13 @@ var stop = function() {
 
 var timeCop = function (array, time) {
 	var bestguess = Math.ceil(time);
-	if (array.indexOf(bestguess) == -1) {
-		return 0;
-	} else {
-		while (bestguess > 0) {
+	if (bestguess >= 0) {
+		while (array.indexOf(bestguess) == -1 && bestguess > 0) {
 			bestguess--;
 		}
 		return bestguess;
+	} else {
+		return 0;
 	}
 };
 
@@ -87,11 +87,7 @@ var populate = function() {
 
 var replay = function() {
   starttime = Date.now();
-  if (localStorage.length === 0) {
-  	startLoop();
-  } else {
-  	startLoop();
-  }
+  startLoop();
 };
 
 var clear = function() {
@@ -162,6 +158,7 @@ widget = SC.Widget(widgetIframe);
 
 widget.bind(SC.Widget.Events.READY, function() {
 	widget.bind(SC.Widget.Events.PLAY, function() {
+		//step = widget.getPosition(gettime) || 0;
 		replay();
     	widget.getPosition(logtimes);
     });
