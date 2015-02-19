@@ -137,10 +137,18 @@ var replayRender = function(events, step) {
 //soundcloud
 
 
-SC.initialize({
-  client_id: '236697f8b4f2a7269e15ec730362fead'
+var widgetIframe = document.getElementById('sc-widget'),
+widget = SC.Widget(widgetIframe);
+
+widget.bind(SC.Widget.Events.READY, function() {
+      widget.bind(SC.Widget.Events.PLAY, function() {
+      	replay();
+      	widget.getPosition(logtimes);
+      });
 });
 
-var track_url = 'http://soundcloud.com/forss/flickermood';
-SC.oEmbed(track_url, { auto_play: false, maxheight: 81 }, document.getElementById("footer"));
+var logtimes = function (scposition) {
+	console.log("my time: " + timesofar + " sctime: " + scposition);
+};
+
 
