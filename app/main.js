@@ -26,6 +26,7 @@ var stop = function() {
 function renderLoop() {
 	if (step < state.eventLog.length) {
 		timesofar = Date.now() - starttime;
+		//this gross > code is what actually mutates the dom
 		if (timesofar > replayRender(state.eventLog, step)) {
 			step++;
 		}
@@ -55,6 +56,7 @@ var replay = function() {
   startLoop();
 };
 
+//would be nice to ship this ui stuff somewhere else
 var displayTimer = function(time) {
 	document.getElementById("time").textContent=time;
 };
@@ -89,10 +91,10 @@ var updateSel = function(anchor, head) {
 };
 
 var replayRender = function(events, step) {
-	event = events[step];
-	anchor = event.anchor;
-	head = event.head;
-	eventTime = event.time;
+	var event = events[step];
+	var anchor = event.anchor;
+	var head = event.head;
+	var eventTime = event.time;
 	updateSel(anchor, head);
 	displayTimer(eventTime);
 	if (step < events.length - 1) {
