@@ -1,23 +1,9 @@
-var CodeMirror = require("codemirror/lib/codemirror");
-
-require("codemirror/lib/codemirror.css");
+var editor = require("./cm");
 require("./style.css");
 
-require("codemirror/mode/javascript/javascript");
-require("codemirror/addon/search/match-highlighter");
-require("codemirror/addon/edit/matchbrackets");
-require("codemirror/addon/selection/active-line");
-require("codemirror/addon/selection/mark-selection");
-
-var editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
-    lineNumbers: true,
-    mode: "javascript",
-    highlightSelectionMatches: true,
-    matchBrackets: true,
-    styleActiveLine: true,
-    styleSelectedText: true
-});
-
+var state = require("./state");
+var storage = require("./storage");
+var timeCop = require("./timecop");
 
 var starttime;
 var timesofar;
@@ -26,9 +12,6 @@ var delay;
 var requestId;
 
 var step = 0;
-
-var eventLog = [];
-var eventTimes = [];
 
 var start = function() {
 	starttime = Date.now();
@@ -40,23 +23,10 @@ var stop = function() {
 	recording = false;
 };
 
-
-var timeCop = function (array, time) {
-	var bestguess = Math.ceil(time);
-	if (bestguess >= 0) {
-		while (array.indexOf(bestguess) == -1 && bestguess > 0) {
-			bestguess--;
-		}
-		return bestguess;
-	} else {
-		return 0;
-	}
-};
-
 function renderLoop() {
-	if (step < eventLog.length) {
+	if (step < state.eventLog.length) {
 		timesofar = Date.now() - starttime;
-		if (timesofar > replayRender(eventLog, step)) {
+		if (timesofar > replayRender(state.eventLog, step)) {
 			step++;
 		}
 		displayTimer(timesofar);
@@ -80,25 +50,9 @@ function stopLoop() {
     }
 }
 
-var populate = function() {
-	eventLog = JSON.parse(localStorage.getItem('events'));
-  	eventTimes = JSON.parse(localStorage.getItem('times'));
-};
-
 var replay = function() {
   starttime = Date.now();
   startLoop();
-};
-
-var clear = function() {
-	if (window.confirm("Are you sure you want to clear events in localstorage?")) {
-		localStorage.clear();
-	}
-};
-
-var store = function() {
-	localStorage.setItem('events', JSON.stringify(eventLog));
-	localStorage.setItem('times', JSON.stringify(eventTimes));
 };
 
 var displayTimer = function(time) {
@@ -107,10 +61,10 @@ var displayTimer = function(time) {
 
 document.getElementById("start").onclick = start;
 document.getElementById("stop").onclick = stop;
-document.getElementById("populate").onclick = populate;
+document.getElementById("populate").onclick = storage.populate;
 document.getElementById("replay").onclick = replay;
-document.getElementById("store").onclick = store;
-document.getElementById("clear").onclick = clear;
+document.getElementById("store").onclick = storage.store;
+document.getElementById("clear").onclick = storage.clear;
 
 var posFromEvent = function(event) {
 	var anchor = event[0].anchor;
@@ -120,14 +74,13 @@ var posFromEvent = function(event) {
 	return {anchor: anchor, head: head, time: timesofar};
 };
 
-
 editor.doc.on("cursorActivity", function() {
 	if (recording) {
-		eventLog.push(posFromEvent(editor.doc.listSelections()));
-		eventTimes.push(timesofar);
+		state.eventLog.push(posFromEvent(editor.doc.listSelections()));
+		state.eventTimes.push(timesofar);
 		displayTimer(timesofar);
-		console.log(eventLog);
-		console.log(eventTimes);
+		console.log(state.eventLog);
+		console.log(state.eventTimes);
 	}
 });
 
@@ -158,23 +111,24 @@ widget = SC.Widget(widgetIframe);
 
 widget.bind(SC.Widget.Events.READY, function() {
 	widget.bind(SC.Widget.Events.PLAY, function() {
-		//step = widget.getPosition(gettime) || 0;
+//		step = widget.getPosition(gettime) || 0;
 		replay();
     	widget.getPosition(logtimes);
     });
     widget.bind(SC.Widget.Events.PAUSE, function() {
     	stopLoop();
+//    	step = widget.getPosition(gettime);
     	widget.getPosition(logtimes);
     });
 });
 
 var logtimes = function (scposition) {
 	console.log("my time: " + timesofar + " sctime: " + scposition);
-	console.log(timeCop(eventTimes, scposition));
+	console.log(timeCop(state.eventTimes, scposition));
 };
 
 var gettime = function (scposition) {
-	timeCop(eventTimes, scposition);
+	timeCop(state.eventTimes, scposition);
 };
 
 
