@@ -18,7 +18,6 @@ var replayRender = function(events, step) {
 	var head = event.head;
 	var eventTime = event.time;
 	updateSel(anchor, head);
-	displayTimer(eventTime);
 	if (step < events.length - 1) {
 	 	return events[step + 1].time;
 	} else {
@@ -56,5 +55,6 @@ function stopLoop() {
 
 module.exports = {
 	startLoop: startLoop,
-	stopLoop: stopLoop
+	stopLoop: stopLoop,
+	displayTimer: displayTimer
 };

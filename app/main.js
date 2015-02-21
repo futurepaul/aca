@@ -17,16 +17,23 @@ var stopRecord = function() {
 	recording.shouldRecord(false);
 };
 
-var replay = function() {
-  state.playStartTime = time.rightNow();
-  playback.startLoop();
+var play = function() {
+	state.playStartTime = time.rightNow() - state.playTimeSoFar;
+	playback.startLoop();
+};
+
+var reset = function() {
+	state.playTimeSoFar = 0;
+	state.step = 0;
+	playback.displayTimer(state.playTimeSoFar);
 };
 
 //would be nice to ship this ui stuff somewhere else
 document.getElementById("start").onclick = startRecord;
 document.getElementById("stop").onclick = stopRecord;
 document.getElementById("populate").onclick = storage.populate;
-document.getElementById("replay").onclick = replay;
+document.getElementById("play").onclick = play;
+document.getElementById("reset").onclick = reset;
 document.getElementById("store").onclick = storage.store;
 document.getElementById("clear").onclick = storage.clear;
 
@@ -40,7 +47,7 @@ widget = SC.Widget(widgetIframe);
 widget.bind(SC.Widget.Events.READY, function() {
 	widget.bind(SC.Widget.Events.PLAY, function() {
 //		step = widget.getPosition(gettime) || 0;
-		replay();
+		play();
     	widget.getPosition(logtimes);
     });
     widget.bind(SC.Widget.Events.PAUSE, function() {
@@ -51,7 +58,7 @@ widget.bind(SC.Widget.Events.READY, function() {
 });
 
 var logtimes = function (scposition) {
-	console.log("my time: " + state.timesofar + " sctime: " + scposition);
+	console.log("my time: " + state.playTimeSoFar + " sctime: " + scposition);
 	console.log(timeCop(state.eventTimes, scposition));
 };
 
