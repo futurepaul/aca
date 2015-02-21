@@ -4,10 +4,11 @@ require("./style.css");
 var state = require("./state");
 var storage = require("./storage");
 var timeCop = require("./timecop");
+var recording = require("./recording");
 
-var starttime;
-var timesofar;
-var recording;
+starttime = state.starttime;
+timesofar = state.timesofar;
+
 var delay;
 var requestId;
 
@@ -15,12 +16,12 @@ var step = 0;
 
 var start = function() {
 	starttime = Date.now();
-	recording = true;
+	recording.shouldRecord(true);
 	console.log(starttime);
 };
 
 var stop = function() {
-	recording = false;
+	recording.shouldRecord(false);
 };
 
 function renderLoop() {
@@ -68,23 +69,6 @@ document.getElementById("replay").onclick = replay;
 document.getElementById("store").onclick = storage.store;
 document.getElementById("clear").onclick = storage.clear;
 
-var posFromEvent = function(event) {
-	var anchor = event[0].anchor;
-	var head = event[0].head;
-	var time = Date.now();
-	timesofar = time - starttime;
-	return {anchor: anchor, head: head, time: timesofar};
-};
-
-editor.doc.on("cursorActivity", function() {
-	if (recording) {
-		state.eventLog.push(posFromEvent(editor.doc.listSelections()));
-		state.eventTimes.push(timesofar);
-		displayTimer(timesofar);
-		console.log(state.eventLog);
-		console.log(state.eventTimes);
-	}
-});
 
 var updateSel = function(anchor, head) {
 	editor.doc.setSelection(anchor, head);

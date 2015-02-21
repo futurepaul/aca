@@ -1,4 +1,6 @@
 module.exports = {
 	eventLog: [],
-	eventTimes: []
+	eventTimes: [],
+	timesofar: 0,
+	starttime: 0
 };
