@@ -6,27 +6,25 @@ var storage = require("./storage");
 var timeCop = require("./timecop");
 var recording = require("./recording");
 var playback = require("./playback");
+var time = require("./time");
 
-var start = function() {
-	state.starttime = Date.now();
+var startRecord = function() {
+	state.recStartTime = time.rightNow();
 	recording.shouldRecord(true);
-	console.log(state.starttime);
 };
 
-var stop = function() {
+var stopRecord = function() {
 	recording.shouldRecord(false);
 };
 
 var replay = function() {
-  state.starttime = Date.now();
+  state.playStartTime = time.rightNow();
   playback.startLoop();
 };
 
 //would be nice to ship this ui stuff somewhere else
-
-
-document.getElementById("start").onclick = start;
-document.getElementById("stop").onclick = stop;
+document.getElementById("start").onclick = startRecord;
+document.getElementById("stop").onclick = stopRecord;
 document.getElementById("populate").onclick = storage.populate;
 document.getElementById("replay").onclick = replay;
 document.getElementById("store").onclick = storage.store;
@@ -46,7 +44,7 @@ widget.bind(SC.Widget.Events.READY, function() {
     	widget.getPosition(logtimes);
     });
     widget.bind(SC.Widget.Events.PAUSE, function() {
-    	stopLoop();
+    	playback.stopLoop();
 //    	step = widget.getPosition(gettime);
     	widget.getPosition(logtimes);
     });

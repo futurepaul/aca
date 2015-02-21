@@ -1,5 +1,6 @@
 var editor = require("./cm");
 var state = require("./state");
+var time = require("./time");
 
 var requestId;
 
@@ -27,7 +28,7 @@ var replayRender = function(events, step) {
 
 function renderLoop() {
 	if (state.step < state.eventLog.length) {
-		state.timesofar = Date.now() - state.starttime;
+		state.timesofar = time.since(state.playStartTime);
 		//this gross > code is what actually mutates the dom
 		if (state.timesofar > replayRender(state.eventLog, state.step)) {
 			state.step++;
@@ -54,5 +55,6 @@ function stopLoop() {
 }
 
 module.exports = {
-	startLoop: startLoop
+	startLoop: startLoop,
+	stopLoop: stopLoop
 };

@@ -1,11 +1,11 @@
 var editor = require("./cm");
 var state = require("./state");
+var time = require("./time");
 
 var posFromEvent = function(event) {
 	var anchor = event[0].anchor;
 	var head = event[0].head;
-	var time = Date.now();
-	state.timesofar = time - state.starttime;
+	state.timesofar = time.since(state.recStartTime);
 	return {anchor: anchor, head: head, time: state.timesofar};
 };
 
