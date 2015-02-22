@@ -2,8 +2,6 @@ var editor = require("./cm");
 var state = require("./state");
 var time = require("./time");
 
-var requestId;
-
 var updateSel = function(anchor, head) {
 	editor.doc.setSelection(anchor, head);
 };
@@ -13,44 +11,36 @@ var displayTimer = function(time) {
 };
 
 var replayRender = function(events, step) {
-	var event = events[step];
-	var anchor = event.anchor;
-	var head = event.head;
-	var eventTime = event.time;
-	updateSel(anchor, head);
-	if (step < events.length - 1) {
-	 	return events[step + 1].time;
-	} else {
-	 	return eventTime;
-	}
+	updateSel(events[step].anchor, events[step].head);
 };
 
-function renderLoop() {
-	if (state.step < state.eventLog.length) {
-		state.playTimeSoFar = time.since(state.playStartTime);
-		//this gross > code is what actually mutates the dom
-		if (state.playTimeSoFar > replayRender(state.eventLog, state.step)) {
-			state.step++;
+var renderLoop = function() {
+	if (state.playing) {
+		if (state.step < state.eventTimes.length) {
+			var step = state.step;
+			var nextstep = state.step + 1;
+			replayRender(state.eventLog, step);
+			displayTimer(state.eventTimes[step]);
+			var wait = time.between(state.eventTimes[step], state.eventTimes[nextstep]);
+			setTimeout(function() {
+				state.step++;
+				renderLoop();
+			}, wait);
+		} else {
+			state.playing = false;
+			console.log("That's it!");
 		}
-		displayTimer(state.playTimeSoFar);
-		requestId = window.requestAnimationFrame(renderLoop);
-	} else {
-		stopLoop();
-		console.log("That's it!");
-	}
 }
 
+};
+
 function startLoop() {
-	if (!requestId) {
-       renderLoop();
-    }
+	state.playing = true;
+    renderLoop();
 }
 
 function stopLoop() {
-	if (requestId) {
-       window.cancelAnimationFrame(requestId);
-       requestId = undefined;
-    }
+	state.playing = false;
 }
 
 module.exports = {

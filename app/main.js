@@ -33,14 +33,12 @@ var stopRecord = function() {
 };
 
 var play = function() {
-	state.playStartTime = time.rightNow() - state.playTimeSoFar;
 	playback.startLoop();
 };
 
 var reset = function() {
-	state.playTimeSoFar = 0;
 	state.step = 0;
-	csp.putAsync(displayTimeChan, state.playTimeSoFar);
+	csp.putAsync(displayTimeChan, 0);
 };
 
 //would be nice to ship this ui stuff somewhere else
@@ -73,12 +71,13 @@ widget.bind(SC.Widget.Events.READY, function() {
 });
 
 var logtimes = function (scposition) {
-	console.log("my time: " + state.playTimeSoFar + " sctime: " + scposition);
+	console.log("my time: " + state.step + " sctime: " + scposition);
 	console.log(timeCop(state.eventTimes, scposition));
 };
 
 var gettime = function (scposition) {
-	state.playTimeSoFar = Math.ceil(scposition);
+	state.step = timeCop(state.eventTimes, scposition);
+	console.log(timeCop(state.eventTimes, scposition));
 };
 
 
