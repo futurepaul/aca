@@ -27,12 +27,12 @@ var replayRender = function(events, step) {
 
 function renderLoop() {
 	if (state.step < state.eventLog.length) {
-		state.timesofar = time.since(state.playStartTime);
+		state.playTimeSoFar = time.since(state.playStartTime);
 		//this gross > code is what actually mutates the dom
-		if (state.timesofar > replayRender(state.eventLog, state.step)) {
+		if (state.playTimeSoFar > replayRender(state.eventLog, state.step)) {
 			state.step++;
 		}
-		displayTimer(state.timesofar);
+		displayTimer(state.playTimeSoFar);
 		requestId = window.requestAnimationFrame(renderLoop);
 	} else {
 		stopLoop();

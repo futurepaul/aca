@@ -1,5 +1,9 @@
+"use strict";
+
 var editor = require("./cm");
 require("./style.css");
+
+var csp = require("js-csp");
 
 var state = require("./state");
 var storage = require("./storage");
@@ -7,6 +11,17 @@ var timeCop = require("./timecop");
 var recording = require("./recording");
 var playback = require("./playback");
 var time = require("./time");
+
+var displayTimeChan = csp.chan(csp.buffers.sliding(1));
+
+csp.go(function*() {
+  while(true) {
+    var time = yield csp.take(displayTimeChan);
+    playback.displayTimer(time);
+  }
+});
+
+csp.putAsync(displayTimeChan, 42);
 
 var startRecord = function() {
 	state.recStartTime = time.rightNow();
@@ -25,7 +40,7 @@ var play = function() {
 var reset = function() {
 	state.playTimeSoFar = 0;
 	state.step = 0;
-	playback.displayTimer(state.playTimeSoFar);
+	csp.putAsync(displayTimeChan, state.playTimeSoFar);
 };
 
 //would be nice to ship this ui stuff somewhere else
@@ -46,7 +61,7 @@ widget = SC.Widget(widgetIframe);
 
 widget.bind(SC.Widget.Events.READY, function() {
 	widget.bind(SC.Widget.Events.PLAY, function() {
-//		step = widget.getPosition(gettime) || 0;
+		widget.getPosition(gettime);
 		play();
     	widget.getPosition(logtimes);
     });
@@ -63,7 +78,7 @@ var logtimes = function (scposition) {
 };
 
 var gettime = function (scposition) {
-	timeCop(state.eventTimes, scposition);
+	state.playTimeSoFar = Math.ceil(scposition);
 };
 
 

@@ -5,13 +5,13 @@ var time = require("./time");
 var posFromEvent = function(event) {
 	var anchor = event[0].anchor;
 	var head = event[0].head;
-	state.timesofar = time.since(state.recStartTime);
-	return {anchor: anchor, head: head, time: state.timesofar};
+	state.recTimeSoFar = time.since(state.recStartTime);
+	return {anchor: anchor, head: head, time: state.recTimeSoFar};
 };
 
 var observeCursor = function(cm) {
 	state.eventLog.push(posFromEvent(cm.listSelections()));
-	state.eventTimes.push(state.timesofar);
+	state.eventTimes.push(state.recTimeSoFar);
 	console.log(state.eventLog);
 	console.log(state.eventTimes);
 };
