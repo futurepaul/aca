@@ -18,9 +18,12 @@ var renderLoop = function() {
 	if (state.playing) {
 		if (state.step < state.eventTimes.length) {
 			var step = state.step;
+			// var thistime = state.eventTimes[step];
+			// state.playTimeSoFar = thistime;
 			var nextstep = state.step + 1;
 			replayRender(state.eventLog, step);
-			displayTimer(state.eventTimes[step]);
+			console.log("step: " + step + ", time: " + state.eventTimes[step]);
+//			displayTimer(thistime);
 			var wait = time.between(state.eventTimes[step], state.eventTimes[nextstep]);
 			setTimeout(function() {
 				state.step++;
@@ -34,17 +37,13 @@ var renderLoop = function() {
 
 };
 
-function startLoop() {
-	state.playing = true;
-    renderLoop();
-}
-
-function stopLoop() {
-	state.playing = false;
-}
-
 module.exports = {
-	startLoop: startLoop,
-	stopLoop: stopLoop,
+	startLoop: function() {
+		state.playing = true;
+    	renderLoop();
+	},
+	stopLoop: function() {
+		state.playing = false;
+	},
 	displayTimer: displayTimer
 };

@@ -4,7 +4,7 @@ module.exports = function (array, time) {
 		while (array.indexOf(bestguess) == -1 && bestguess > 0) {
 			bestguess--;
 		}
-		return bestguess;
+		return Math.max(0, array.indexOf(bestguess));
 	} else {
 		return 0;
 	}
