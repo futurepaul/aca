@@ -33,17 +33,10 @@ var renderLoop = function() {
 			state.playing = false;
 			console.log("That's it!");
 		}
-}
-
+	}
 };
 
 module.exports = {
-	startLoop: function() {
-		state.playing = true;
-    	renderLoop();
-	},
-	stopLoop: function() {
-		state.playing = false;
-	},
+	renderLoop: renderLoop,
 	displayTimer: displayTimer
 };

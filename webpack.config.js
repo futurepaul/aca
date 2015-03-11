@@ -10,8 +10,6 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.css$/, loader: "style!css" },
-            { test: /js-csp/, loader: 'babel-loader?experimental&optional=runtime' },
-            { test: /\.js?$/, exclude: /node_modules/, loader: 'babel-loader?experimental&optional=runtime' }
         ]
     }
 };
